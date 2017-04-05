@@ -56,6 +56,33 @@ class PhotoViewController: UIViewController {
         color.Blue=blueColor
         return color
     }
+    
+    //returns a 20 x 20 2D Array of CGPoints, where each CGPoint is an intersection on the board
+    func getArrayofPoints(topLeft: CGPoint, topRight: CGPoint, bottomLeft: CGPoint, bottomRight: CGPoint) -> [[CGPoint]]{
+        var intersections = [[CGPoint]]()
+        
+        let xLeftOffset = (topLeft.x - bottomLeft.x)/19
+        let yLeftOffset = (topLeft.y - bottomLeft.y)/19
+        let xRightOffset = (topRight.x - bottomRight.x)/19
+        let yRightOffset = (topRight.y - bottomRight.y)/19
+        
+        for i in 0...19 {
+            intersections[i][0] = CGPoint(x: topLeft.x + xLeftOffset*CGFloat(i), y: topLeft.y + yLeftOffset*CGFloat(i))
+        }
+        for j in 0...19 {
+            intersections[j][19] = CGPoint(x: topRight.x + xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
+        }
+        for k in 1...18 {
+            let leftPoint = intersections[k][0]
+            let rightPoint = intersections[k][19]
+            let xAcrossOffset = (rightPoint.x - leftPoint.x)/19
+            let yAcrossOffset = (rightPoint.y - leftPoint.y)/19
+            for a in 1...18 {
+                intersections[k][a] = CGPoint(x: leftPoint.x + xAcrossOffset*CGFloat(a), y: leftPoint.y + yAcrossOffset*CGFloat(a))
+            }
+        }
+        return intersections
+    }
 
     /*
     // MARK: - Navigation
