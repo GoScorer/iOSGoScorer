@@ -48,8 +48,35 @@
                                 <rect key="frame" x="0.0" y="20" width="375" height="375"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="opS-cL-5sg">
-                                <rect key="frame" x="67" y="433" width="20" height="20"/>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" id="Mz2-Mv-kLb">
+                                <rect key="frame" x="314" y="64" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="hG4-aV-Emh" appends="YES" id="2IU-tB-mSO"/>
+                                </connections>
+                            </imageView>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" id="IbC-JB-1oU">
+                                <rect key="frame" x="41" y="334" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="jNV-CG-Yyn" appends="YES" id="Eqf-K4-ntG"/>
+                                </connections>
+                            </imageView>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" id="xwi-sg-k6t">
+                                <rect key="frame" x="314" y="334" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <gestureRecognizers/>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="7aC-vQ-6tz" appends="YES" id="ZPj-vC-xG3"/>
+                                </connections>
+                            </imageView>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" id="opS-cL-5sg">
+                                <rect key="frame" x="41" y="64" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
@@ -61,14 +88,32 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <connections>
+                        <outlet property="blPoint" destination="IbC-JB-1oU" id="JQm-mi-vf1"/>
+                        <outlet property="brPoint" destination="xwi-sg-k6t" id="Kjd-DD-GjC"/>
                         <outlet property="photo" destination="JMf-5g-tzp" id="2oC-qf-llg"/>
                         <outlet property="tlPoint" destination="opS-cL-5sg" id="Mdr-xl-YQU"/>
+                        <outlet property="trPoint" destination="Mz2-Mv-kLb" id="MkS-A6-gkd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wsR-J9-D6v" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="4To-VX-OT9">
                     <connections>
                         <action selector="didPanTopLeft:" destination="qBb-Ps-9zu" id="nTA-B4-yM2"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="hG4-aV-Emh">
+                    <connections>
+                        <action selector="didPanTopRight:" destination="qBb-Ps-9zu" id="Ze7-2f-rD0"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="jNV-CG-Yyn">
+                    <connections>
+                        <action selector="didPanBottomLeft:" destination="qBb-Ps-9zu" id="jhF-eR-1RZ"/>
+                    </connections>
+                </panGestureRecognizer>
+                <panGestureRecognizer minimumNumberOfTouches="1" id="7aC-vQ-6tz">
+                    <connections>
+                        <action selector="bottomRightDidPan:" destination="qBb-Ps-9zu" id="hNQ-Nf-8yp"/>
                     </connections>
                 </panGestureRecognizer>
             </objects>

@@ -20,8 +20,13 @@ class PhotoViewController: UIViewController {
     var colorPoints = [[Color]]()
     
     var tloc: CGPoint!
-    
+    var troc: CGPoint!
+    var bloc: CGPoint!
+    var broc: CGPoint!
     @IBOutlet weak var tlPoint: UIImageView!
+    @IBOutlet weak var trPoint: UIImageView!
+    @IBOutlet weak var blPoint: UIImageView!
+    @IBOutlet weak var brPoint: UIImageView!
     
     class Color{
         public var description: String { return "[R:\(Red) G:\(Green) B:\(Blue)]" }
@@ -31,18 +36,62 @@ class PhotoViewController: UIViewController {
     }
     
     @IBAction func didPanTopLeft(_ sender: UIPanGestureRecognizer) {
-        print("begin");
+        
         let translation = sender.translation(in: view)
         if sender.state == .began{
             tloc = tlPoint.center
-            print("start");
+            
         }
         else if(sender.state == .changed){
             tlPoint.center = CGPoint(x: tloc.x + translation.x,y: tloc.y + translation.y)
-            print("changes");
+            
         }
         else if(sender.state == .ended){
-            print("ended");
+                    }
+    }
+    
+  
+    @IBAction func bottomRightDidPan(_ sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: view)
+        if sender.state == .began{
+            broc = brPoint.center
+            
+        }
+        else if(sender.state == .changed){
+            brPoint.center = CGPoint(x: broc.x + translation.x,y: broc.y + translation.y)
+            
+        }
+        else if(sender.state == .ended){
+        }
+
+        
+    }
+    @IBAction func didPanBottomLeft(_ sender: UIPanGestureRecognizer) {
+        let translation = sender.translation(in: view)
+        if sender.state == .began{
+            bloc = blPoint.center
+            
+        }
+        else if(sender.state == .changed){
+            blPoint.center = CGPoint(x: bloc.x + translation.x,y: bloc.y + translation.y)
+            
+        }
+        else if(sender.state == .ended){
+        }
+    }
+    
+    @IBAction func didPanTopRight(_ sender: UIPanGestureRecognizer) {
+        
+        let translation = sender.translation(in: view)
+        if sender.state == .began{
+            troc = trPoint.center
+            
+        }
+        else if(sender.state == .changed){
+            trPoint.center = CGPoint(x: troc.x + translation.x,y: troc.y + translation.y)
+            
+        }
+        else if(sender.state == .ended){
         }
     }
     
