@@ -16,15 +16,49 @@ class PhotoViewController: UIViewController {
     var topRight: CGPoint = CGPoint(x: 375, y: 0)
     var bottomLeft: CGPoint = CGPoint(x: 0, y: 375)
     var bottomRight: CGPoint = CGPoint(x: 375, y: 375)
+    var intersectionPoints = [[CGPoint]]()
+    var colorPoints = [[Color]]()
+    
+    var tloc: CGPoint!
+    
+    @IBOutlet weak var tlPoint: UIImageView!
+    
     class Color{
         public var description: String { return "[R:\(Red) G:\(Green) B:\(Blue)]" }
         var Red: Float = 0
         var Green: Float = 0
         var Blue: Float = 0
     }
+    
+    @IBAction func didPanTopLeft(_ sender: UIPanGestureRecognizer) {
+        print("begin");
+        let translation = sender.translation(in: view)
+        if sender.state == .began{
+            tloc = tlPoint.center
+            print("start");
+        }
+        else if(sender.state == .changed){
+            tlPoint.center = CGPoint(x: tloc.x + translation.x,y: tloc.y + translation.y)
+            print("changes");
+        }
+        else if(sender.state == .ended){
+            print("ended");
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         photo.image=tempimage
+        // intersectionPoints = getArrayofPoints(topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight)
+        /* let lightBulb = UIImageView(frame: CGRect(x: 100, y: 100, width: 20, height: 20))
+         
+         lightBulb.image = UIImage(named: "lightBulb")
+         lightBulb.contentMode = .scaleToFill
+         lightBulb.isUserInteractionEnabled = true
+         
+         lightBulb.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan"))
+         
+         self.view.addSubview(lightBulb)*/
         print(getColor(x: 100, y: 100).description)
     }
 
@@ -61,6 +95,13 @@ class PhotoViewController: UIViewController {
     func getArrayofPoints(topLeft: CGPoint, topRight: CGPoint, bottomLeft: CGPoint, bottomRight: CGPoint) -> [[CGPoint]]{
         var intersections = [[CGPoint]]()
         
+        for i in 0...19{
+            intersections.append([CGPoint]())
+            for _ in 0...19{
+                intersections[i].append(CGPoint())
+            }
+        }
+        
         let xLeftOffset = (topLeft.x - bottomLeft.x)/19
         let yLeftOffset = (topLeft.y - bottomLeft.y)/19
         let xRightOffset = (topRight.x - bottomRight.x)/19
@@ -82,6 +123,34 @@ class PhotoViewController: UIViewController {
             }
         }
         return intersections
+    }
+    
+    func getColorPoints(){
+        let dim = 19
+        let searchRadius = 5;
+        // insert code to get x and y of angle placers
+        for i in 0...dim{
+            for j in 0...dim{
+                var colorPoint = [Color]()
+                var a = intersectionPoints[i]
+                let xCoord = Int(a[j].x)
+                let yCoord = Int(a[j].y)
+                colorPoint[0] = getColor(x:xCoord+searchRadius, y: yCoord+searchRadius)
+                colorPoint[1] = getColor(x:xCoord+searchRadius, y: yCoord-searchRadius)
+                colorPoint[2] = getColor(x:xCoord-searchRadius, y: yCoord+searchRadius)
+                colorPoint[3] = getColor(x:xCoord-searchRadius, y: yCoord-searchRadius)
+                let color = Color()
+                for k in 0...3{
+                    color.Red += colorPoint[k].Red
+                    color.Green += colorPoint[k].Green
+                    color.Blue += colorPoint[k].Blue
+                }
+                color.Red /= 4
+                color.Green /= 4
+                color.Blue /= 4
+                colorPoints[i][j] = color
+            }
+        }
     }
 
     /*
