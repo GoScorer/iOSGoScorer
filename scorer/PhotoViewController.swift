@@ -151,9 +151,9 @@ class PhotoViewController: UIViewController {
         }
         
         let xLeftOffset = (topLeft.x - bottomLeft.x)/19
-        let yLeftOffset = (topLeft.y - bottomLeft.y)/19
+        let yLeftOffset = (abs(topLeft.y - bottomLeft.y))/19
         let xRightOffset = (topRight.x - bottomRight.x)/19
-        let yRightOffset = (topRight.y - bottomRight.y)/19
+        let yRightOffset = (abs(topRight.y - bottomRight.y))/19
         
         for i in 0...19 {
             intersections[i][0] = CGPoint(x: topLeft.x + xLeftOffset*CGFloat(i), y: topLeft.y + yLeftOffset*CGFloat(i))
@@ -161,7 +161,7 @@ class PhotoViewController: UIViewController {
         for j in 0...19 {
             intersections[j][19] = CGPoint(x: topRight.x + xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
         }
-        for k in 1...18 {
+        for k in 0...19 {
             let leftPoint = intersections[k][0]
             let rightPoint = intersections[k][19]
             let xAcrossOffset = (rightPoint.x - leftPoint.x)/19
