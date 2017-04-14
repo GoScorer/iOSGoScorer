@@ -84,6 +84,14 @@
                                     <outletCollection property="gestureRecognizers" destination="4To-VX-OT9" appends="YES" id="fc3-n6-TyF"/>
                                 </connections>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="sWu-aG-pzz">
+                                <rect key="frame" x="156" y="403" width="63" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Compute"/>
+                                <connections>
+                                    <action selector="computer:" destination="qBb-Ps-9zu" eventType="touchUpInside" id="SYU-hg-kz4"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>

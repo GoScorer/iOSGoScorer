@@ -12,10 +12,7 @@ class PhotoViewController: UIViewController {
     
     @IBOutlet weak var photo: UIImageView!
     var tempimage: UIImage?
-    var topLeft: CGPoint = CGPoint(x: 0, y: 0)
-    var topRight: CGPoint = CGPoint(x: 375, y: 0)
-    var bottomLeft: CGPoint = CGPoint(x: 0, y: 375)
-    var bottomRight: CGPoint = CGPoint(x: 375, y: 375)
+   
     var intersectionPoints = [[CGPoint]]()
     var colorPoints = [[Color]]()
     
@@ -34,7 +31,20 @@ class PhotoViewController: UIViewController {
         var Green: Float = 0
         var Blue: Float = 0
     }
-    
+    @IBAction func computer(_ sender: Any) {
+        intersectionPoints = getArrayofPoints(topLeft: tlPoint.center, topRight: trPoint.center, bottomLeft: blPoint.center, bottomRight: brPoint.center)
+        for i in 0...19{
+            for j in 0...19{
+                let dot = #imageLiteral(resourceName: "Image")
+                let dotImageView = UIImageView(image: dot)
+                let point = intersectionPoints[i][j]
+                dotImageView.frame = CGRect(x: point.x, y: point.y, width: 10, height: 10)
+                view.addSubview(dotImageView)
+            }
+        }
+        
+    }
+  
     @IBAction func didPanTopLeft(_ sender: UIPanGestureRecognizer) {
         
         let translation = sender.translation(in: view)
@@ -50,7 +60,7 @@ class PhotoViewController: UIViewController {
                     }
     }
     
-  
+
     @IBAction func bottomRightDidPan(_ sender: UIPanGestureRecognizer) {
         let translation = sender.translation(in: view)
         if sender.state == .began{
@@ -98,17 +108,6 @@ class PhotoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         photo.image=tempimage
-        // intersectionPoints = getArrayofPoints(topLeft: topLeft, topRight: topRight, bottomLeft: bottomLeft, bottomRight: bottomRight)
-        /* let lightBulb = UIImageView(frame: CGRect(x: 100, y: 100, width: 20, height: 20))
-         
-         lightBulb.image = UIImage(named: "lightBulb")
-         lightBulb.contentMode = .scaleToFill
-         lightBulb.isUserInteractionEnabled = true
-         
-         lightBulb.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: "handlePan"))
-         
-         self.view.addSubview(lightBulb)*/
-        print(getColor(x: 100, y: 100).description)
     }
 
     override func didReceiveMemoryWarning() {
