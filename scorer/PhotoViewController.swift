@@ -15,6 +15,7 @@ class PhotoViewController: UIViewController {
    
     var intersectionPoints = [[CGPoint]]()
     var colorPoints = [[Color]]()
+    var gameArray = [[Int]]()
     
     var tloc: CGPoint!
     var troc: CGPoint!
@@ -38,8 +39,12 @@ class PhotoViewController: UIViewController {
             }
         }
         intersectionPoints = getArrayofPoints(topLeft: tlPoint.center, topRight: trPoint.center, bottomLeft: blPoint.center, bottomRight: brPoint.center)
-        for i in 0...19{
-            for j in 0...19{
+        
+        getColorPoints()
+        getGameArray()
+        
+        for i in 0...18{
+            for j in 0...18{
                 let dot = #imageLiteral(resourceName: "Image")
                 let dotImageView = UIImageView(image: dot)
                 let point = intersectionPoints[i][j]
@@ -49,6 +54,135 @@ class PhotoViewController: UIViewController {
             }
         }
         
+    }
+    
+    /*func getGameArray(){
+        var variance = 20
+        var typesOfPoints = [[Color]]()
+        
+        for column in colorPoints {
+            for color in column {
+                if (typesOfPoints.isEmpty){
+                    print("FIRST")
+                    var newArr: [Color] = [color]
+                    typesOfPoints.append(newArr)
+                }
+                else {
+                    var isInRange = false
+                    for i in 0...typesOfPoints.count-1 {
+                        if(isColorInRange(color1: color, color2: typesOfPoints[i][0], variance: variance)){
+                            typesOfPoints[i].append(color)
+                            isInRange = true
+                            break
+                        }
+                    }
+                    if(!isInRange){
+                        var newArr: [Color] = [color]
+                        typesOfPoints.append(newArr)
+                    }
+                }
+            }
+        }
+        for column in typesOfPoints {
+            print("TYPE START \n")
+            for color in column {
+                print ("Red: \(color.Red) Green: \(color.Green) Blue: \(color.Blue)")
+            }
+        }
+    }*/
+    
+    
+    
+    //returns 19 x 19 array of 0, 1, 2 ; 0 - no piece, 1 - black piece, 2 - white piece
+    func getGameArray(){
+        //var variance = 20
+        var gameArray = [[Int]]()
+        
+        for i in 0...18{
+            gameArray.append([Int]())
+            for _ in 0...18{
+                gameArray[i].append(Int())
+            }
+        }
+        
+        for j in 0...18 {
+            for k in 0...18 {
+                var color = colorPoints[j][k]
+                if(isColorWhiteOrBlack(color: color)){
+                    if(color.Red < 125){
+                        gameArray[j][k] = 1
+                    }
+                    else{
+                        gameArray[j][k] = 2
+                    }
+                }
+                else{
+                    gameArray[j][k] = 0
+                }
+            }
+        }
+        /*for column in typesOfPoints {
+            print("TYPE START \n")
+            for color in column {
+                print ("Red: \(color.Red) Green: \(color.Green) Blue: \(color.Blue)")
+                //print(isColorWhiteOrBlack(color: color))
+            }
+        }*/
+        print(gameArray)
+    }
+    
+    
+    func getTypesOfPieces(){
+        //var variance = 20
+        var typesOfPoints: [[Color]] = [[], [], []]
+        
+        for column in colorPoints {
+            for color in column {
+                if(isColorWhiteOrBlack(color: color)){
+                    if(color.Red < 125){
+                        typesOfPoints[1].append(color)
+                    }
+                    else{
+                        typesOfPoints[2].append(color)
+                    }
+                }
+                else{
+                    typesOfPoints[0].append(color)
+                }
+            }
+        }
+        for column in typesOfPoints {
+            print("TYPE START \n")
+            for color in column {
+                print ("Red: \(color.Red) Green: \(color.Green) Blue: \(color.Blue)")
+                //print(isColorWhiteOrBlack(color: color))
+            }
+        }
+    }
+    
+    func isColorWhiteOrBlack(color: Color) -> Bool {
+        let tolerance = 10
+        if(Int(color.Red) < min(Int(color.Green) + tolerance, 255) && Int(color.Red) > max(Int(color.Green) - tolerance, 0)){
+            if(Int(color.Red) < min(Int(color.Blue) + tolerance, 255) && Int(color.Red) > max(Int(color.Blue) - tolerance, 0)){
+                if(Int(color.Blue) < min(Int(color.Green) + tolerance, 255) && Int(color.Blue) > max(Int(color.Green) - tolerance, 0)){
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    func isColorInRange(color1: Color, color2: Color, variance: Int) -> Bool{
+        if (!(Int(color1.Red) < min(Int(color2.Red) + variance, 255) && Int(color1.Red) > max(Int(color2.Red) - variance, 0))){
+            return false
+        }
+        if (!(Int(color1.Green) < min(Int(color2.Green) + variance, 255) && Int(color1.Green) > max(Int(color2.Green) - variance, 0))){
+            return false
+        }
+        if (!(Int(color1.Blue) < min(Int(color2.Blue) + variance, 255) && Int(color1.Blue) > max(Int(color2.Blue) - variance, 0))){
+            return false
+        }
+        return true
     }
   
     @IBAction func didPanTopLeft(_ sender: UIPanGestureRecognizer) {
@@ -149,30 +283,30 @@ class PhotoViewController: UIViewController {
     func getArrayofPoints(topLeft: CGPoint, topRight: CGPoint, bottomLeft: CGPoint, bottomRight: CGPoint) -> [[CGPoint]]{
         var intersections = [[CGPoint]]()
         
-        for i in 0...19{
+        for i in 0...18{
             intersections.append([CGPoint]())
-            for _ in 0...19{
+            for _ in 0...18{
                 intersections[i].append(CGPoint())
             }
         }
         
-        let xLeftOffset = (topLeft.x - bottomLeft.x)/19
-        let yLeftOffset = (abs(topLeft.y - bottomLeft.y))/19
-        let xRightOffset = (topRight.x - bottomRight.x)/19
-        let yRightOffset = (abs(topRight.y - bottomRight.y))/19
+        let xLeftOffset = (topLeft.x - bottomLeft.x)/18
+        let yLeftOffset = (abs(topLeft.y - bottomLeft.y))/18
+        let xRightOffset = (topRight.x - bottomRight.x)/18
+        let yRightOffset = (abs(topRight.y - bottomRight.y))/18
         
-        for i in 0...19 {
+        for i in 0...18 {
             intersections[i][0] = CGPoint(x: topLeft.x - xLeftOffset*CGFloat(i), y: topLeft.y + yLeftOffset*CGFloat(i))
         }
-        for j in 0...19 {
-            intersections[j][19] = CGPoint(x: topRight.x - xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
+        for j in 0...18 {
+            intersections[j][18] = CGPoint(x: topRight.x - xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
         }
-        for k in 0...19 {
+        for k in 0...18 {
             let leftPoint = intersections[k][0]
-            let rightPoint = intersections[k][19]
-            let xAcrossOffset = (rightPoint.x - leftPoint.x)/19
-            let yAcrossOffset = (rightPoint.y - leftPoint.y)/19
-            for a in 1...18 {
+            let rightPoint = intersections[k][18]
+            let xAcrossOffset = (rightPoint.x - leftPoint.x)/18
+            let yAcrossOffset = (rightPoint.y - leftPoint.y)/18
+            for a in 1...17 {
                 intersections[k][a] = CGPoint(x: leftPoint.x + xAcrossOffset*CGFloat(a), y: leftPoint.y + yAcrossOffset*CGFloat(a))
             }
         }
@@ -180,8 +314,16 @@ class PhotoViewController: UIViewController {
     }
     
     func getColorPoints(){
-        let dim = 19
-        let searchRadius = 5;
+        let dim = 18
+        let searchRadius = 3;
+        
+        for i in 0...dim{
+            colorPoints.append([Color]())
+            for _ in 0...dim{
+                colorPoints[i].append(Color())
+            }
+        }
+        
         // insert code to get x and y of angle placers
         for i in 0...dim{
             for j in 0...dim{
@@ -189,10 +331,10 @@ class PhotoViewController: UIViewController {
                 var a = intersectionPoints[i]
                 let xCoord = Int(a[j].x)
                 let yCoord = Int(a[j].y)
-                colorPoint[0] = getColor(x:xCoord+searchRadius, y: yCoord+searchRadius)
-                colorPoint[1] = getColor(x:xCoord+searchRadius, y: yCoord-searchRadius)
-                colorPoint[2] = getColor(x:xCoord-searchRadius, y: yCoord+searchRadius)
-                colorPoint[3] = getColor(x:xCoord-searchRadius, y: yCoord-searchRadius)
+                colorPoint.append(getColor(x:xCoord+searchRadius, y: yCoord+searchRadius))
+                colorPoint.append(getColor(x:xCoord+searchRadius, y: yCoord-searchRadius))
+                colorPoint.append(getColor(x:xCoord-searchRadius, y: yCoord+searchRadius))
+                colorPoint.append(getColor(x:xCoord-searchRadius, y: yCoord-searchRadius))
                 let color = Color()
                 for k in 0...3{
                     color.Red += colorPoint[k].Red
