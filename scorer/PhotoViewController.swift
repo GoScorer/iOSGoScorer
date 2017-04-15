@@ -32,13 +32,19 @@ class PhotoViewController: UIViewController {
         var Blue: Float = 0
     }
     @IBAction func computer(_ sender: Any) {
+        for view in self.view.subviews {
+            if (view.tag == 75){
+                view.removeFromSuperview()
+            }
+        }
         intersectionPoints = getArrayofPoints(topLeft: tlPoint.center, topRight: trPoint.center, bottomLeft: blPoint.center, bottomRight: brPoint.center)
         for i in 0...19{
             for j in 0...19{
                 let dot = #imageLiteral(resourceName: "Image")
                 let dotImageView = UIImageView(image: dot)
                 let point = intersectionPoints[i][j]
-                dotImageView.frame = CGRect(x: point.x, y: point.y, width: 10, height: 10)
+                dotImageView.frame = CGRect(x: point.x - 5, y: point.y - 5, width: 10, height: 10)
+                dotImageView.tag = 75
                 view.addSubview(dotImageView)
             }
         }
@@ -156,10 +162,10 @@ class PhotoViewController: UIViewController {
         let yRightOffset = (abs(topRight.y - bottomRight.y))/19
         
         for i in 0...19 {
-            intersections[i][0] = CGPoint(x: topLeft.x + xLeftOffset*CGFloat(i), y: topLeft.y + yLeftOffset*CGFloat(i))
+            intersections[i][0] = CGPoint(x: topLeft.x - xLeftOffset*CGFloat(i), y: topLeft.y + yLeftOffset*CGFloat(i))
         }
         for j in 0...19 {
-            intersections[j][19] = CGPoint(x: topRight.x + xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
+            intersections[j][19] = CGPoint(x: topRight.x - xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
         }
         for k in 0...19 {
             let leftPoint = intersections[k][0]
