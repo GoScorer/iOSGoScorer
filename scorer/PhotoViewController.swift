@@ -141,12 +141,9 @@ class PhotoViewController: UIViewController {
                 //print(isColorWhiteOrBlack(color: color))
             }
         }*/
-<<<<<<< HEAD
+
         print(gameArray)
         return gameArray
-=======
-        //print(gameArray)
->>>>>>> origin/master
     }
     
     
@@ -537,18 +534,33 @@ class PhotoViewController: UIViewController {
             
             for i in 0...3 {
                 if (neighbors[i] == 0) {
-                    queue.enqueue(neighbors[i])
                     if (i == 0) {
                         column += 1
+                        if (!visited[row][column + 1]) {
+                            queue.enqueue(neighbors[i])
+                            visited[row][column + 1] = true
+                        }
                     }
                     else if (i == 1) {
                         column -= 1
+                        if (!visited[row][column - 1]) {
+                            queue.enqueue(neighbors[i])
+                            visited[row][column - 1] = true
+                        }
                     }
                     else if (i == 2) {
                         row += 1
+                        if (!visited[row + 1][column]) {
+                            queue.enqueue(neighbors[i])
+                            visited[row + 1][column] = true
+                        }
                     }
                     else {
                         row -= 1
+                        if (!visited[row - 1][column]) {
+                            queue.enqueue(neighbors[i])
+                            visited[row - 1][column] = true
+                        }
                     }
                     noEmpty = false
                 }
