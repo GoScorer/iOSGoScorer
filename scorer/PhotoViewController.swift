@@ -94,7 +94,7 @@ class PhotoViewController: UIViewController {
     
     
     //returns 19 x 19 array of 0, 1, 2 ; 0 - no piece, 1 - black piece, 2 - white piece
-    func getGameArray(){
+    func getGameArray() -> [[Int]]{
         //var variance = 20
         var gameArray = [[Int]]()
         
@@ -129,6 +129,7 @@ class PhotoViewController: UIViewController {
             }
         }*/
         print(gameArray)
+        return gameArray
     }
     
     
@@ -348,6 +349,239 @@ class PhotoViewController: UIViewController {
             }
         }
     }
+    
+    public class Node {
+        var value: Int
+        var next: Node?
+        weak var previous: Node?
+        
+        init(value: Int) {
+            self.value = value
+        }
+    }
+    
+    public class LinkedList {
+        fileprivate var head: Node?
+        private var tail: Node?
+        
+        public var isEmpty: Bool {
+            return head == nil
+        }
+        
+        public var first: Node? {
+            return head
+        }
+        
+        public var last: Node? {
+            return tail
+        }
+        
+        public func append(value: Int) {
+            let newNode = Node(value: value)
+            if let tailNode = tail {
+                newNode.previous = tailNode
+                tailNode.next = newNode
+            } else {
+                head = newNode
+            }
+            tail = newNode
+        }
+        
+        public func nodeAt(index: Int) -> Node? {
+            if index >= 0 {
+                var node = head
+                var i = index
+                while node != nil {
+                    if i == 0 { return node }
+                    i -= 1
+                    node = node!.next
+                }
+            }
+            return nil
+        }
+        
+        public func removeAll() {
+            head = nil
+            tail = nil
+        }
+        
+        public func remove(node: Node) -> Int {
+            let prev = node.previous
+            let next = node.next
+            
+            if let prev = prev {
+                prev.next = next
+            } else {
+                head = next
+            }
+            next?.previous = prev
+            
+            if next == nil {
+                tail = prev
+            }
+            
+            node.previous = nil
+            node.next = nil
+            
+            return node.value
+        }
+    }
+    
+    public struct Queue {
+        
+        fileprivate var list = LinkedList()
+        
+        public var isEmpty: Bool {
+            return list.isEmpty
+        }
+        
+        public mutating func enqueue(_ element: Int) {
+            list.append(value: element)
+        }
+        
+        public mutating func dequeue() -> Int? {
+            guard !list.isEmpty, let element = list.first else { return nil }
+            
+            list.remove(node: element)
+            
+            return element.value
+        }
+        
+        public func peek() -> Int? {
+            return list.first?.value
+        }
+    }
+    
+    func calculateScore(gameArray: [[Int]]) {
+        var blackScore = 0
+        var whiteScore = 0
+        
+        var queue = Queue()
+        
+        var visited = [[Bool]]()
+        
+        for i in 0...18 {
+            for j in 0...18 {
+                visited[i][j] = false
+            }
+        }
+        
+        var isEdge = [[Bool]]()
+        
+        for i in 0...18 {
+            if (i == 0 || i == 18) {
+                for j in 0...18 {
+                    isEdge[i][j] = true
+                }
+            }
+                
+            else {
+                for j in 0...18 {
+                    if (j == 0 || j == 18) {
+                        isEdge[i][j] = true
+                    }
+                    else {
+                        isEdge[i][j] = false
+                    }
+                }
+            }
+        }
+        
+        
+        var row = 1
+        var column = 1
+        
+        queue.enqueue(gameArray[row][column])
+        
+        var emptyCount = 0
+        
+        while (!queue.isEmpty) {
+            var current = queue.dequeue()
+            
+            var neighbors = [Int]()
+            
+            neighbors[0] = gameArray[row][column + 1]
+            neighbors[1] = gameArray[row][column - 1]
+            neighbors[2] = gameArray[row + 1][column]
+            neighbors[3] = gameArray[row - 1][column]
+            
+            var surroundingPieces = [Int]()
+            var piecesCount = 0
+            
+            var noEmpty = true
+            
+            for i in 0...3 {
+                if (neighbors[i] == 0) {
+                    queue.enqueue(neighbors[i])
+                    if (i == 0) {
+                        column += 1
+                    }
+                    else if (i == 1) {
+                        column -= 1
+                    }
+                    else if (i == 2) {
+                        row += 1
+                    }
+                    else {
+                        row -= 1
+                    }
+                    noEmpty = false
+                }
+                else {
+                    if (i == 0) {
+                        if (!isEdge[row][column + 1]) {
+                            surroundingPieces[piecesCount] = neighbors[i]
+                            piecesCount += 1
+                        }
+                    }
+                    else if (i == 1) {
+                        if (!isEdge[row][column - 1]) {
+                            surroundingPieces[piecesCount] = neighbors[i]
+                            piecesCount += 1
+                        }
+                    }
+                    else if (i == 2) {
+                        if (!isEdge[row + 1][column]) {
+                            surroundingPieces[piecesCount] = neighbors[i]
+                            piecesCount += 1
+                        }
+                    }
+                    else {
+                        if (!isEdge[row - 1][column]) {
+                            surroundingPieces[piecesCount] = neighbors[i]
+                            piecesCount += 1
+                        }
+                    }
+                }
+            }
+            
+            if (noEmpty) {
+                var allBlack = true
+                var allWhite = true
+                for i in 0...piecesCount {
+                    if surroundingPieces[i] == 1 {
+                        allWhite = false
+                    }
+                    if surroundingPieces[i] == 2 {
+                        allBlack = false
+                    }
+                }
+                
+                if (allBlack) {
+                    blackScore = emptyCount
+                }
+                    
+                else if(allWhite) {
+                    whiteScore = emptyCount
+                }
+            }
+            
+        }
+        
+    }
+    
+    
+    
 
     /*
     // MARK: - Navigation
