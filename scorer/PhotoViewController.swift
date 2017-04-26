@@ -12,7 +12,7 @@ class PhotoViewController: UIViewController {
     
     @IBOutlet weak var photo: UIImageView!
     var tempimage: UIImage?
-   
+    let boardDimension = 19
     var intersectionPoints = [[CGPoint]]()
     var colorPoints = [[Color]]()
     var gameArray = [[Int]]()
@@ -27,10 +27,11 @@ class PhotoViewController: UIViewController {
     @IBOutlet weak var brPoint: UIImageView!
     
     class Color{
-        public var description: String { return "[R:\(Red) G:\(Green) B:\(Blue)]" }
+        public var description: String { return "[R:\(Red) G:\(Green) B:\(Blue) S:\(Sum)]" }
         var Red: Float = 0
         var Green: Float = 0
         var Blue: Float = 0
+        var Sum: Float = 0
     }
     @IBAction func computer(_ sender: Any) {
         for view in self.view.subviews {
@@ -38,20 +39,33 @@ class PhotoViewController: UIViewController {
                 view.removeFromSuperview()
             }
         }
+        
         intersectionPoints = getArrayofPoints(topLeft: tlPoint.center, topRight: trPoint.center, bottomLeft: blPoint.center, bottomRight: brPoint.center)
+      //print(getColor(x: 31+3,y1: 70+3).description)
         
         getColorPoints()
         getGameArray()
         
-        for i in 0...18{
-            for j in 0...18{
-                let dot = #imageLiteral(resourceName: "Image")
+        for i in 0...boardDimension-1{
+            for j in 0...boardDimension-1{
+                let piece = gameArray[i][j]
+                var dot = #imageLiteral(resourceName: "white")
+                if(piece==0){
+                    dot = #imageLiteral(resourceName: "red")
+                }
+                else if(piece==1){
+                    dot = #imageLiteral(resourceName: "black")
+                }
                 let dotImageView = UIImageView(image: dot)
                 let point = intersectionPoints[i][j]
-                dotImageView.frame = CGRect(x: point.x - 5, y: point.y - 5, width: 10, height: 10)
+                dotImageView.frame = CGRect(x: 0, y:0, width: 10, height: 10)
+                dotImageView.center = point
                 dotImageView.tag = 75
+                dotImageView.alpha = 0.5
                 view.addSubview(dotImageView)
+                //print(Int(colorPoints[i][j].Sum), terminator:" ")
             }
+          //  print()
         }
         
     }
@@ -96,18 +110,17 @@ class PhotoViewController: UIViewController {
     //returns 19 x 19 array of 0, 1, 2 ; 0 - no piece, 1 - black piece, 2 - white piece
     func getGameArray() -> [[Int]]{
         //var variance = 20
-        var gameArray = [[Int]]()
         
-        for i in 0...18{
+        for i in 0...boardDimension-1{
             gameArray.append([Int]())
-            for _ in 0...18{
+            for _ in 0...boardDimension-1{
                 gameArray[i].append(Int())
             }
         }
         
-        for j in 0...18 {
-            for k in 0...18 {
-                var color = colorPoints[j][k]
+        for j in 0...boardDimension-1 {
+            for k in 0...boardDimension-1 {
+                let color = colorPoints[j][k]
                 if(isColorWhiteOrBlack(color: color)){
                     if(color.Red < 125){
                         gameArray[j][k] = 1
@@ -128,8 +141,12 @@ class PhotoViewController: UIViewController {
                 //print(isColorWhiteOrBlack(color: color))
             }
         }*/
+<<<<<<< HEAD
         print(gameArray)
         return gameArray
+=======
+        //print(gameArray)
+>>>>>>> origin/master
     }
     
     
@@ -152,13 +169,13 @@ class PhotoViewController: UIViewController {
                 }
             }
         }
-        for column in typesOfPoints {
-            print("TYPE START \n")
+        /*for column in typesOfPoints {
+           // print("TYPE START \n")
             for color in column {
-                print ("Red: \(color.Red) Green: \(color.Green) Blue: \(color.Blue)")
+                //print ("Red: \(color.Red) Green: \(color.Green) Blue: \(color.Blue)")
                 //print(isColorWhiteOrBlack(color: color))
             }
-        }
+        }*/
     }
     
     func isColorWhiteOrBlack(color: Color) -> Bool {
@@ -194,7 +211,7 @@ class PhotoViewController: UIViewController {
             
         }
         else if(sender.state == .changed){
-            tlPoint.center = CGPoint(x: tloc.x + translation.x,y: tloc.y + translation.y)
+            tlPoint.center = CGPoint(x: tloc.x + translation.x/4,y: tloc.y + translation.y/4)
             
         }
         else if(sender.state == .ended){
@@ -255,7 +272,8 @@ class PhotoViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    func getColor(x: Int,y: Int) -> Color{
+    func getColor(x: Int,y1: Int) -> Color{
+        let y=y1-20
         var pixel : [UInt8] = [0, 0, 0, 0]
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         let bitmapInfo = CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedLast.rawValue)
@@ -265,12 +283,12 @@ class PhotoViewController: UIViewController {
         context!.translateBy(x: -(CGFloat)(x), y: -(CGFloat)(y));
         photo.layer.render(in: context!)
         
-        NSLog("pixel: %d %d %d %d", pixel[0], pixel[1], pixel[2], pixel[3]);
+     //   NSLog("pixel: %d %d %d %d", pixel[0], pixel[1], pixel[2], pixel[3]);
         
         let redColor : Float = Float(pixel[0])
         let greenColor : Float = Float(pixel[1])
         let blueColor: Float = Float(pixel[2])
-        let colorAlpha: Float = Float(pixel[3])
+        //let colorAlpha: Float = Float(pixel[3])
         
         // Create UIColor Object
         let color : Color! = Color()
@@ -283,31 +301,32 @@ class PhotoViewController: UIViewController {
     //returns a 20 x 20 2D Array of CGPoints, where each CGPoint is an intersection on the board
     func getArrayofPoints(topLeft: CGPoint, topRight: CGPoint, bottomLeft: CGPoint, bottomRight: CGPoint) -> [[CGPoint]]{
         var intersections = [[CGPoint]]()
+    
         
-        for i in 0...18{
+        for i in 0...boardDimension-1{
             intersections.append([CGPoint]())
-            for _ in 0...18{
+            for _ in 0...boardDimension-1{
                 intersections[i].append(CGPoint())
             }
         }
         
-        let xLeftOffset = (topLeft.x - bottomLeft.x)/18
-        let yLeftOffset = (abs(topLeft.y - bottomLeft.y))/18
-        let xRightOffset = (topRight.x - bottomRight.x)/18
-        let yRightOffset = (abs(topRight.y - bottomRight.y))/18
+        let xLeftOffset = (topLeft.x - bottomLeft.x)/(CGFloat(boardDimension-1))
+        let yLeftOffset = (abs(topLeft.y - bottomLeft.y))/(CGFloat(boardDimension-1))
+        let xRightOffset = (topRight.x - bottomRight.x)/(CGFloat(boardDimension-1))
+        let yRightOffset = (abs(topRight.y - bottomRight.y))/(CGFloat(boardDimension-1))
         
-        for i in 0...18 {
+        for i in 0...boardDimension-1 {
             intersections[i][0] = CGPoint(x: topLeft.x - xLeftOffset*CGFloat(i), y: topLeft.y + yLeftOffset*CGFloat(i))
         }
-        for j in 0...18 {
-            intersections[j][18] = CGPoint(x: topRight.x - xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
+        for j in 0...boardDimension-1 {
+            intersections[j][boardDimension-1] = CGPoint(x: topRight.x - xRightOffset*CGFloat(j), y: topRight.y + yRightOffset*CGFloat(j))
         }
-        for k in 0...18 {
+        for k in 0...boardDimension-1 {
             let leftPoint = intersections[k][0]
-            let rightPoint = intersections[k][18]
-            let xAcrossOffset = (rightPoint.x - leftPoint.x)/18
-            let yAcrossOffset = (rightPoint.y - leftPoint.y)/18
-            for a in 1...17 {
+            let rightPoint = intersections[k][boardDimension-1]
+            let xAcrossOffset = (rightPoint.x - leftPoint.x)/(CGFloat(boardDimension-1))
+            let yAcrossOffset = (rightPoint.y - leftPoint.y)/(CGFloat(boardDimension-1))
+            for a in 0...boardDimension-2 {
                 intersections[k][a] = CGPoint(x: leftPoint.x + xAcrossOffset*CGFloat(a), y: leftPoint.y + yAcrossOffset*CGFloat(a))
             }
         }
@@ -315,7 +334,7 @@ class PhotoViewController: UIViewController {
     }
     
     func getColorPoints(){
-        let dim = 18
+        let dim = boardDimension-1
         let searchRadius = 3;
         
         for i in 0...dim{
@@ -329,13 +348,17 @@ class PhotoViewController: UIViewController {
         for i in 0...dim{
             for j in 0...dim{
                 var colorPoint = [Color]()
-                var a = intersectionPoints[i]
-                let xCoord = Int(a[j].x)
-                let yCoord = Int(a[j].y)
-                colorPoint.append(getColor(x:xCoord+searchRadius, y: yCoord+searchRadius))
-                colorPoint.append(getColor(x:xCoord+searchRadius, y: yCoord-searchRadius))
-                colorPoint.append(getColor(x:xCoord-searchRadius, y: yCoord+searchRadius))
-                colorPoint.append(getColor(x:xCoord-searchRadius, y: yCoord-searchRadius))
+                let xCoord = Int(intersectionPoints[i][j].x)
+                let yCoord = Int(intersectionPoints[i][j].y)
+                if(i==1 && j==3){
+               //     print(xCoord)
+                 //   print(yCoord)
+                 //   print(getColor(x: xCoord, y1: yCoord).description)
+                }
+                colorPoint.append(getColor(x:xCoord+searchRadius, y1: yCoord+searchRadius))
+                colorPoint.append(getColor(x:xCoord+searchRadius, y1: yCoord-searchRadius))
+                colorPoint.append(getColor(x:xCoord-searchRadius, y1: yCoord+searchRadius))
+                colorPoint.append(getColor(x:xCoord-searchRadius, y1: yCoord-searchRadius))
                 let color = Color()
                 for k in 0...3{
                     color.Red += colorPoint[k].Red
@@ -345,7 +368,9 @@ class PhotoViewController: UIViewController {
                 color.Red /= 4
                 color.Green /= 4
                 color.Blue /= 4
+                color.Sum = color.Red + color.Green + color.Blue
                 colorPoints[i][j] = color
+                //print("x:\(i) y:\(j) " + color.description)
             }
         }
     }
