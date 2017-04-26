@@ -14,6 +14,16 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UINaviga
         super.viewDidLoad()
     }
 
+    @IBAction func takeButton(_ sender: Any) {
+        if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera) {
+        let vc = UIImagePickerController()
+        vc.delegate = self
+        vc.allowsEditing = true
+        vc.sourceType = UIImagePickerControllerSourceType.camera
+        self.present(vc, animated:true, completion:nil)
+        }
+        
+    }
     @IBAction func uploadButton(_ sender: Any) {
         let vc = UIImagePickerController()
         vc.delegate = self
@@ -24,6 +34,7 @@ class ViewController: UIViewController,UIImagePickerControllerDelegate, UINaviga
     }
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         let editedImage = info[UIImagePickerControllerEditedImage] as! UIImage
+        
         self.imageToUpload = editedImage
         
         self.dismiss(animated: true, completion: nil)

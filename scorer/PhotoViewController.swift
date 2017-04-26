@@ -25,7 +25,11 @@ class PhotoViewController: UIViewController {
     @IBOutlet weak var trPoint: UIImageView!
     @IBOutlet weak var blPoint: UIImageView!
     @IBOutlet weak var brPoint: UIImageView!
+    var blackScore = 0
+    var whiteScore = 0
     
+    @IBOutlet weak var blackScoreLabel: UILabel!
+    @IBOutlet weak var whiteScoreLabel: UILabel!
     class Color{
         public var description: String { return "[R:\(Red) G:\(Green) B:\(Blue) S:\(Sum)]" }
         var Red: Float = 0
@@ -44,8 +48,9 @@ class PhotoViewController: UIViewController {
       //print(getColor(x: 31+3,y1: 70+3).description)
         
         getColorPoints()
-        getGameArray()
-        
+        calculateScore(gameArray: getGameArray())
+        whiteScoreLabel.text=String(whiteScore)
+        blackScoreLabel.text=String(blackScore)
         for i in 0...boardDimension-1{
             for j in 0...boardDimension-1{
                 let piece = gameArray[i][j]
@@ -223,7 +228,7 @@ class PhotoViewController: UIViewController {
             
         }
         else if(sender.state == .changed){
-            brPoint.center = CGPoint(x: broc.x + translation.x,y: broc.y + translation.y)
+            brPoint.center = CGPoint(x: broc.x + translation.x/4,y: broc.y + translation.y/4)
             
         }
         else if(sender.state == .ended){
@@ -238,7 +243,7 @@ class PhotoViewController: UIViewController {
             
         }
         else if(sender.state == .changed){
-            blPoint.center = CGPoint(x: bloc.x + translation.x,y: bloc.y + translation.y)
+            blPoint.center = CGPoint(x: bloc.x + translation.x/4,y: bloc.y + translation.y/4)
             
         }
         else if(sender.state == .ended){
@@ -253,7 +258,7 @@ class PhotoViewController: UIViewController {
             
         }
         else if(sender.state == .changed){
-            trPoint.center = CGPoint(x: troc.x + translation.x,y: troc.y + translation.y)
+            trPoint.center = CGPoint(x: troc.x + translation.x/4,y: troc.y + translation.y/4)
             
         }
         else if(sender.state == .ended){
@@ -475,8 +480,6 @@ class PhotoViewController: UIViewController {
     }
     
     func calculateScore(gameArray: [[Int]]) {
-        var blackScore = 0
-        var whiteScore = 0
         
         var queue = Queue()
         
