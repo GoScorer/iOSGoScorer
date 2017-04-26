@@ -532,84 +532,105 @@ class PhotoViewController: UIViewController {
             
             var noEmpty = true
             
-            for i in 0...3 {
-                if (neighbors[i] == 0) {
-                    if (i == 0) {
-                        column += 1
-                        if (!visited[row][column + 1]) {
-                            queue.enqueue(neighbors[i])
-                            visited[row][column + 1] = true
+            if (current == 0) {
+                for i in 0...3 {
+                    if (neighbors[i] == 0) {
+                        if (i == 0) {
+                            column += 1
+                            if (!visited[row][column + 1]) {
+                                queue.enqueue(neighbors[i])
+                                visited[row][column + 1] = true
+                            }
                         }
-                    }
-                    else if (i == 1) {
-                        column -= 1
-                        if (!visited[row][column - 1]) {
-                            queue.enqueue(neighbors[i])
-                            visited[row][column - 1] = true
+                        else if (i == 1) {
+                            column -= 1
+                            if (!visited[row][column - 1]) {
+                                queue.enqueue(neighbors[i])
+                                visited[row][column - 1] = true
+                            }
                         }
-                    }
-                    else if (i == 2) {
-                        row += 1
-                        if (!visited[row + 1][column]) {
-                            queue.enqueue(neighbors[i])
-                            visited[row + 1][column] = true
+                        else if (i == 2) {
+                            row += 1
+                            if (!visited[row + 1][column]) {
+                                queue.enqueue(neighbors[i])
+                                visited[row + 1][column] = true
+                            }
                         }
+                        else {
+                            row -= 1
+                            if (!visited[row - 1][column]) {
+                                queue.enqueue(neighbors[i])
+                                visited[row - 1][column] = true
+                            }
+                        }
+                        noEmpty = false
                     }
                     else {
-                        row -= 1
-                        if (!visited[row - 1][column]) {
-                            queue.enqueue(neighbors[i])
-                            visited[row - 1][column] = true
+                        if (i == 0) {
+                            if (!isEdge[row][column + 1]) {
+                                surroundingPieces[piecesCount] = neighbors[i]
+                                piecesCount += 1
+                            }
+                        }
+                        else if (i == 1) {
+                            if (!isEdge[row][column - 1]) {
+                                surroundingPieces[piecesCount] = neighbors[i]
+                                piecesCount += 1
+                            }
+                        }
+                        else if (i == 2) {
+                            if (!isEdge[row + 1][column]) {
+                                surroundingPieces[piecesCount] = neighbors[i]
+                                piecesCount += 1
+                            }
+                        }
+                        else {
+                            if (!isEdge[row - 1][column]) {
+                                surroundingPieces[piecesCount] = neighbors[i]
+                                piecesCount += 1
+                            }
                         }
                     }
-                    noEmpty = false
                 }
-                else {
-                    if (i == 0) {
-                        if (!isEdge[row][column + 1]) {
-                            surroundingPieces[piecesCount] = neighbors[i]
-                            piecesCount += 1
+            
+                if (noEmpty) {
+                    var allBlack = true
+                    var allWhite = true
+                    for i in 0...piecesCount {
+                        if surroundingPieces[i] == 1 {
+                            allWhite = false
+                        }
+                        if surroundingPieces[i] == 2 {
+                            allBlack = false
                         }
                     }
-                    else if (i == 1) {
-                        if (!isEdge[row][column - 1]) {
-                            surroundingPieces[piecesCount] = neighbors[i]
-                            piecesCount += 1
-                        }
+                    
+                    if (allBlack) {
+                        blackScore = emptyCount
                     }
-                    else if (i == 2) {
-                        if (!isEdge[row + 1][column]) {
-                            surroundingPieces[piecesCount] = neighbors[i]
-                            piecesCount += 1
-                        }
-                    }
-                    else {
-                        if (!isEdge[row - 1][column]) {
-                            surroundingPieces[piecesCount] = neighbors[i]
-                            piecesCount += 1
-                        }
+                        
+                    else if(allWhite) {
+                        whiteScore = emptyCount
                     }
                 }
             }
             
-            if (noEmpty) {
-                var allBlack = true
-                var allWhite = true
-                for i in 0...piecesCount {
-                    if surroundingPieces[i] == 1 {
-                        allWhite = false
-                    }
-                    if surroundingPieces[i] == 2 {
-                        allBlack = false
-                    }
+            if (queue.isEmpty) {
+                if (!visited[row][column + 1]) {
+                    queue.enqueue(neighbors[0])
+                    visited[row][column + 1] = true
                 }
-                
-                if (allBlack) {
-                    blackScore = emptyCount
+                if (!visited[row][column - 1]) {
+                    queue.enqueue(neighbors[1])
+                    visited[row][column - 1] = true
                 }
-                    
-                else if(allWhite) {
-                    whiteScore = emptyCount
+                if (!visited[row + 1][column]) {
+                    queue.enqueue(neighbors[2])
+                    visited[row + 1][column] = true
+                }
+                if (!visited[row - 1][column]) {
+                    queue.enqueue(neighbors[3])
+                    visited[row - 1][column] = true
                 }
             }
             
