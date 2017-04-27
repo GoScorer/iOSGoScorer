@@ -489,6 +489,13 @@ class PhotoViewController: UIViewController {
         
         var visited = [[Bool]]()
         
+        for i in 0...18{
+            visited.append([Bool]())
+            for _ in 0...18{
+                visited[i].append(Bool())
+            }
+        }
+        
         for i in 0...18 {
             for j in 0...18 {
                 let value = false
@@ -497,6 +504,13 @@ class PhotoViewController: UIViewController {
         }
         
         var isEdge = [[Bool]]()
+        
+        for i in 0...18{
+            isEdge.append([Bool]())
+            for _ in 0...18{
+                isEdge[i].append(Bool())
+            }
+        }
         
         for i in 0...18 {
             if (i == 0 || i == 18) {
@@ -529,6 +543,7 @@ class PhotoViewController: UIViewController {
         var emptyCount = 0
         
         while (!queue.isEmpty) {
+            print(emptyCount)
             let current = queue.dequeue()
             
             let row = rowQueue.dequeue()!
@@ -536,12 +551,21 @@ class PhotoViewController: UIViewController {
             
             var neighbors = [Int]()
             
+            for _ in 0...3 {
+                neighbors.append(Int())
+            }
+            
             neighbors[0] = gameArray[row][column + 1]
             neighbors[1] = gameArray[row][column - 1]
             neighbors[2] = gameArray[row + 1][column]
             neighbors[3] = gameArray[row - 1][column]
             
             var surroundingPieces = [Int]()
+            
+            for _ in 0...150 {
+                surroundingPieces.append(Int())
+            }
+            
             var piecesCount = 0
             
             var noEmpty = true
@@ -624,6 +648,8 @@ class PhotoViewController: UIViewController {
                         }
                     }
                     
+                    //print(emptyCount)
+                    
                     if (allBlack) {
                         blackScore = emptyCount
                     }
@@ -635,7 +661,7 @@ class PhotoViewController: UIViewController {
                 }
             }
             
-            if (queue.isEmpty) {
+            else {
                 if (!visited[row][column + 1]) && (!isEdge[row][column + 1]) {
                     queue.enqueue(neighbors[0])
                     rowQueue.enqueue(row)
