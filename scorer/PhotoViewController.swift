@@ -544,10 +544,10 @@ class PhotoViewController: UIViewController {
         
         while (!queue.isEmpty) {
             
-            print(emptyCount)
+            print(visited)
+            print(visited.count)
             
-            print(queue.peek())
-            
+            // print(emptyCount)
             
             let current = queue.dequeue()
             
@@ -565,9 +565,11 @@ class PhotoViewController: UIViewController {
             neighbors[2] = gameArray[row + 1][column]
             neighbors[3] = gameArray[row - 1][column]
             
+            /*
             for i in 0...3 {
                 print(neighbors[i])
             }
+            */
             
             var surroundingPieces = [Int]()
             
