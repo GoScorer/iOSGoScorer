@@ -481,6 +481,9 @@ class PhotoViewController: UIViewController {
     
     func calculateScore(gameArray: [[Int]]) {
         
+        blackScore = 0
+        whiteScore = 0
+        
         var queue = Queue()
         
         var rowQueue = Queue()
