@@ -479,16 +479,37 @@ class PhotoViewController: UIViewController {
         }
     }
     
+    public struct Stack {
+        
+        fileprivate var array: [Int] = []
+        
+        mutating func push(_ element: Int) {
+            array.append(element)
+        }
+        
+        mutating func pop() -> Int? {
+            return array.popLast()
+        }
+        
+        func peek() -> Int? {
+            return array.last
+        }
+        
+        var isEmpty: Bool {
+            return array.isEmpty
+        }
+    }
+    
     func calculateScore(gameArray: [[Int]]) {
         
         blackScore = 0
         whiteScore = 0
         
-        var queue = Queue()
+        var queue = Stack()
         
-        var rowQueue = Queue()
+        var rowQueue = Stack()
         
-        var columnQueue = Queue()
+        var columnQueue = Stack()
         
         var visited = [[Bool]]()
         
@@ -538,10 +559,10 @@ class PhotoViewController: UIViewController {
         }
         
         
-        rowQueue.enqueue(1)
-        columnQueue.enqueue(1)
+        rowQueue.push(1)
+        columnQueue.push(1)
         
-        queue.enqueue(gameArray[1][1])
+        queue.push(gameArray[1][1])
         
         var emptyCount = 0
         
@@ -552,10 +573,10 @@ class PhotoViewController: UIViewController {
             
             // print(emptyCount)
             
-            let current = queue.dequeue()
+            let current = queue.pop()
             
-            let row = rowQueue.dequeue()!
-            let column = columnQueue.dequeue()!
+            let row = rowQueue.pop()!
+            let column = columnQueue.pop()!
             
             var neighbors = [Int]()
             
@@ -589,9 +610,9 @@ class PhotoViewController: UIViewController {
                     if (neighbors[i] == 0) {
                         if (i == 0) {
                             if (!visited[row][column + 1]) && (!isEdge[row][column + 1]) {
-                                queue.enqueue(neighbors[i])
-                                rowQueue.enqueue(row)
-                                columnQueue.enqueue(column + 1)
+                                queue.push(neighbors[i])
+                                rowQueue.push(row)
+                                columnQueue.push(column + 1)
                                 visited[row][column + 1] = true
                                 emptyCount += 1
                                 noEmpty = false
@@ -599,9 +620,9 @@ class PhotoViewController: UIViewController {
                         }
                         else if (i == 1) {
                             if (!visited[row][column - 1]) && (!isEdge[row][column - 1]) {
-                                queue.enqueue(neighbors[i])
-                                rowQueue.enqueue(row)
-                                columnQueue.enqueue(column - 1)
+                                queue.push(neighbors[i])
+                                rowQueue.push(row)
+                                columnQueue.push(column - 1)
                                 visited[row][column - 1] = true
                                 emptyCount += 1
                                 noEmpty = false
@@ -609,9 +630,9 @@ class PhotoViewController: UIViewController {
                         }
                         else if (i == 2) {
                             if (!visited[row + 1][column]) && (!isEdge[row + 1][column]) {
-                                queue.enqueue(neighbors[i])
-                                rowQueue.enqueue(row + 1)
-                                columnQueue.enqueue(column)
+                                queue.push(neighbors[i])
+                                rowQueue.push(row + 1)
+                                columnQueue.push(column)
                                 visited[row + 1][column] = true
                                 emptyCount += 1
                                 noEmpty = false
@@ -619,9 +640,9 @@ class PhotoViewController: UIViewController {
                         }
                         else {
                             if (!visited[row - 1][column]) && (!isEdge[row - 1][column]) {
-                                queue.enqueue(neighbors[i])
-                                rowQueue.enqueue(row - 1)
-                                columnQueue.enqueue(column)
+                                queue.push(neighbors[i])
+                                rowQueue.push(row - 1)
+                                columnQueue.push(column)
                                 visited[row - 1][column] = true
                                 emptyCount += 1
                                 noEmpty = false
@@ -680,27 +701,27 @@ class PhotoViewController: UIViewController {
                     emptyCount = 0
                     
                     if (!visited[row][column + 1]) && (!isEdge[row][column + 1]) {
-                        queue.enqueue(neighbors[0])
-                        rowQueue.enqueue(row)
-                        columnQueue.enqueue(column + 1)
+                        queue.push(neighbors[0])
+                        rowQueue.push(row)
+                        columnQueue.push(column + 1)
                         visited[row][column + 1] = true
                     }
                     if (!visited[row][column - 1]) && (!isEdge[row][column - 1]) {
-                        queue.enqueue(neighbors[1])
-                        rowQueue.enqueue(row)
-                        columnQueue.enqueue(column - 1)
+                        queue.push(neighbors[1])
+                        rowQueue.push(row)
+                        columnQueue.push(column - 1)
                         visited[row][column - 1] = true
                     }
                     if (!visited[row + 1][column]) && (!isEdge[row + 1][column]) {
-                        queue.enqueue(neighbors[2])
-                        rowQueue.enqueue(row + 1)
-                        columnQueue.enqueue(column)
+                        queue.push(neighbors[2])
+                        rowQueue.push(row + 1)
+                        columnQueue.push(column)
                         visited[row + 1][column] = true
                     }
                     if (!visited[row - 1][column]) && (!isEdge[row - 1][column]) {
-                        queue.enqueue(neighbors[3])
-                        rowQueue.enqueue(row - 1)
-                        columnQueue.enqueue(column)
+                        queue.push(neighbors[3])
+                        rowQueue.push(row - 1)
+                        columnQueue.push(column)
                         visited[row - 1][column] = true
                     }
                 }
@@ -708,27 +729,27 @@ class PhotoViewController: UIViewController {
             
             else {
                 if (!visited[row][column + 1]) && (!isEdge[row][column + 1]) {
-                    queue.enqueue(neighbors[0])
-                    rowQueue.enqueue(row)
-                    columnQueue.enqueue(column + 1)
+                    queue.push(neighbors[0])
+                    rowQueue.push(row)
+                    columnQueue.push(column + 1)
                     visited[row][column + 1] = true
                 }
                 if (!visited[row][column - 1]) && (!isEdge[row][column - 1]) {
-                    queue.enqueue(neighbors[1])
-                    rowQueue.enqueue(row)
-                    columnQueue.enqueue(column - 1)
+                    queue.push(neighbors[1])
+                    rowQueue.push(row)
+                    columnQueue.push(column - 1)
                     visited[row][column - 1] = true
                 }
                 if (!visited[row + 1][column]) && (!isEdge[row + 1][column]) {
-                    queue.enqueue(neighbors[2])
-                    rowQueue.enqueue(row + 1)
-                    columnQueue.enqueue(column)
+                    queue.push(neighbors[2])
+                    rowQueue.push(row + 1)
+                    columnQueue.push(column)
                     visited[row + 1][column] = true
                 }
                 if (!visited[row - 1][column]) && (!isEdge[row - 1][column]) {
-                    queue.enqueue(neighbors[3])
-                    rowQueue.enqueue(row - 1)
-                    columnQueue.enqueue(column)
+                    queue.push(neighbors[3])
+                    rowQueue.push(row - 1)
+                    columnQueue.push(column)
                     visited[row - 1][column] = true
                 }
                 
