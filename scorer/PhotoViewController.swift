@@ -565,6 +565,7 @@ class PhotoViewController: UIViewController {
         queue.push(gameArray[1][1])
         
         var emptyCount = 0
+        var piecesCount = 0
         
         while (!queue.isEmpty) {
             
@@ -600,8 +601,6 @@ class PhotoViewController: UIViewController {
             for _ in 0...150 {
                 surroundingPieces.append(Int())
             }
-            
-            var piecesCount = 0
             
             var noEmpty = true
             
@@ -678,25 +677,33 @@ class PhotoViewController: UIViewController {
                 }
             
                 if (noEmpty) {
+                    var pieces = 0
                     var allBlack = true
                     var allWhite = true
+                    var whites = 0
+                    var blacks = 0
                     for i in 0...piecesCount {
                         if surroundingPieces[i] == 1 {
                             allWhite = false
+                            blacks += 1
                         }
                         if surroundingPieces[i] == 2 {
                             allBlack = false
+                            whites += 1
                         }
+                        pieces += 1
                     }
+                    
+                    piecesCount = 0
                     
                     //print(emptyCount)
                     
-                    if (allBlack) {
-                        blackScore += emptyCount
+                    if (allBlack) && (blacks > 3) {
+                        blackScore += emptyCount + pieces
                     }
                         
-                    else if(allWhite) {
-                        whiteScore += emptyCount
+                    else if (allWhite) && (whites > 3) {
+                        whiteScore += emptyCount + pieces
                     }
                     emptyCount = 0
                     
